@@ -8,7 +8,7 @@
 
 int main()
 {
-	int fd;
+    int fd;
 	create_socketfd(&fd);
 	connect_socket(&fd);
 	start_reading_loop(&fd);

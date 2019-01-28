@@ -1,4 +1,4 @@
-CC=gcc
+CC=g++
 
 OBJ_DIR=Obj
 BIN_DIR=bin
