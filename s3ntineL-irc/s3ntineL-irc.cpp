@@ -8,9 +8,9 @@ int main()
 {
     int fd;
     print_banner();
-	create_socketfd(&fd);
-	connect_socket(&fd);
-	start_reading_loop(&fd);
+    create_socketfd(&fd);
+    connect_socket(&fd);
+    start_reading_loop(&fd);
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
