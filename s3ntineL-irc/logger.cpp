@@ -38,3 +38,31 @@ void log_message(const char* fmt, ...)
 	fflush(stdout);
 
 }
+
+void print_banner()
+{
+	printf("%s\n", "                      _                        ");
+	printf("%s\n", "                      \\`*-.                    ");
+	printf("%s\n", "                       )  _`-.                 ");
+	printf("%s\n", "                      .  : `. .                ");
+	printf("%s\n", "                      : _   '  \\               ");
+	printf("%s\n", "                      ; *` _.   `*-._          ");
+	printf("%s\n", "                      `-.-'          `-.       ");
+	printf("%s\n", "        0wn3d           ;       `       `.     ");
+	printf("%s\n", "                        :.       .        \\    ");
+	printf("%s\n", "                        . \\  .   :   .-'   .   ");
+	printf("%s\n", "                        '  `+.;  ;  '      :   ");
+	printf("%s\n", "                        :  '  |    ;       ;-. ");
+	printf("%s\n", "                        ; '   : :`-:     _.`* ;");
+	printf("%s\n", "                     .*' /  .*' ; .*`- +'  `*' ");
+	printf("%s\n", "                     `*-*   `*-*  `*-*'        ");
+/*
+	printf("%s\n", "    _                ___       _.--.");
+	printf("%s\n", "    \\`.|\\..----...-'`   `-._.-'_.-'`");
+	printf("%s\n", "    /  ' `         ,       __.--'");
+	printf("%s\n", "    )/' _/     \\   `-_,   /        ");
+	printf("%s\n", "    `-'\" `\"\\_  ,_.-;_.-\\_ ',     ");
+	printf("%s\n", "        _.-'_./   {_.'   ; /");
+	printf("%s\n", "       {_.-``-'         {_/");
+*/
+}

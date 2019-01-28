@@ -7,6 +7,7 @@
 int main()
 {
     int fd;
+    print_banner();
 	create_socketfd(&fd);
 	connect_socket(&fd);
 	start_reading_loop(&fd);
