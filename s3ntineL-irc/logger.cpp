@@ -1,4 +1,4 @@
-#ifdef
+#ifdef _WIN32
 #include "pch.h"
 #endif
 #include "logger.h"

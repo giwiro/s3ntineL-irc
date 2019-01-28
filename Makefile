@@ -5,7 +5,6 @@ BIN_DIR=bin
 RELEASE_DIR=$(BIN_DIR)/Release
 DEBUG_DIR=$(BIN_DIR)/Debug
 PROJECT_DIR=s3ntineL-irc
-SRC_FILES=$(filter-out $(PROJECT_DIR)/pch.cpp, $(wildcard $(PROJECT_DIR)/*.cpp))
 
 # CHANGEMEEEEEEEEE
 PUBLIC_KEY='"-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAv5mynmP9yOJxBVjwsw4Z7V4nPQrKvczED1Mhq2FrlDR0y4JgwYr00oA91G4Y1tERM78VFCIDOcINVO7n0bRTDL24dDmmvtabI0iNveDFKJEr6RnshoKWtmHPsU1nf3chjbDipH1C/PL5aCNRvFQrYrg9RMCskOGGoZEFw4C+xmyCTEsEhT74xBiHrlfstxe/kkmuKAHGL9njtOCxeH/DpS3rFk9Anfyewgs6204jiszNdFpjJXxpkA8qHOpi9A7wfFmn10Lmc9fNUv2kTcVgu5UGIkHqURMDFa7cKD2bPUC5FvztWVB0rJHiw2gAXux/nJDddyqhNxgtvH70sJ4U6wIDAQAB\n-----END PUBLIC KEY-----\n"'
@@ -20,7 +19,7 @@ STATIC_COMPILE_CFLAGS=-static -static-libgcc
 RELEASE_CFLAGS=-O3 -pipe -s -fno-math-errno
 DEBUG_CFLAGS=-Wall
 
-OBJ = $(OBJ_DIR)/s3ntineL-irc.o $(OBJ_DIR)/irc.o $(OBJ_DIR)/net.o $(OBJ_DIR)/logger.o $(OBJ_DIR)/crypto.o $(OBJ_DIR)/command.o
+OBJ = $(OBJ_DIR)/s3ntineL-irc.o $(OBJ_DIR)/irc.o $(OBJ_DIR)/net.o $(OBJ_DIR)/logger.o $(OBJ_DIR)/command.o
 
 # Create directories if not exists
 $(shell mkdir -p $(OBJ_DIR))
@@ -44,8 +43,7 @@ $(OBJ_DIR)/s3ntineL-irc.o: $(PROJECT_DIR)/s3ntineL-irc.cpp
 #					 $(CC) $(DYNAMIC_PUBLIC_KEY_FLAG) $< -c -o $@
 
 # General way to map object files with src/ ones
-# $(OBJ_DIR)/%.o: $(PROJECT_DIR)/%.cpp
-$(OBJ_DIR)/%.o: $(SRC_FILES)
+$(OBJ_DIR)/%.o: $(PROJECT_DIR)/%.cpp
 			 	$(CC) $< -c -o $@
 
 

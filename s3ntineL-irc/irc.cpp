@@ -4,6 +4,9 @@
 #include "irc.h"
 #include "logger.h"
 #include "command.h"
+#if defined(__linux__) || defined(__APPLE__)
+#include "net.h"
+#endif
 
 #ifdef _WIN32
 void generate_nickname(CHAR *nick) {

@@ -3,6 +3,7 @@
 #endif
 #include "command.h"
 #include "logger.h"
+#include "irc.h"
 #ifdef _WIN32
 #include <VersionHelpers.h>
 #endif
