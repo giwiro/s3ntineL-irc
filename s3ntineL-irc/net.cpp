@@ -54,12 +54,12 @@ void connect_socket(int* fd) {
 		sockin.sin_port = htons(IRC_PORT);
 		InetPton(AF_INET, _T(IRC_IP), &sockin.sin_addr.s_addr);
 #else
-		// TODO copy ip address to sockein.sin_addr\
-		// sockin.sin_addr.s_addr = inet_addr(IRC_IP);
+		// TODO copy ip address to sockein.sin_addr
+        sockin.sin_addr.s_addr = inet_addr(IRC_IP);
+        sockin.sin_port = htons(IRC_PORT);
 #endif
 		// Connect to socket
 		if (connect(*fd, (struct sockaddr *)&sockin, sizeof(sockin)) == SOCKET_ERROR) {
-			log_message("error\n");
 			// closesocket(*fd);
 #ifdef _WIN32
 			int last_error = WSAGetLastError();
