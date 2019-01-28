@@ -1,6 +1,7 @@
 // s3ntineL-irc.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
+#ifdef _WIN32
 #include "pch.h"
+#endif
 #include <iostream>
 #include "net.h"
 #include "logger.h"

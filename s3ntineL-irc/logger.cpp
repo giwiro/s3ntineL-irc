@@ -1,4 +1,6 @@
+#ifdef
 #include "pch.h"
+#endif
 #include "logger.h"
 #ifdef _WIN32
 #pragma once

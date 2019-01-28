@@ -1,4 +1,6 @@
+#ifdef _WIN32
 #include "pch.h"
+#endif
 #include "net.h"
 #include "irc.h"
 #include "logger.h"

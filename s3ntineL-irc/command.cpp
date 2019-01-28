@@ -1,7 +1,11 @@
+#ifdef _WIN32
 #include "pch.h"
+#endif
 #include "command.h"
 #include "logger.h"
+#ifdef _WIN32
 #include <VersionHelpers.h>
+#endif
 
 #ifdef _WIN32
 void handle_hello(int fd, CHAR *target) {
