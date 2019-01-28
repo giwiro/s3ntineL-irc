@@ -5,6 +5,9 @@
 #ifdef _WIN32
 #include <VersionHelpers.h>
 #endif
+#ifdef __APPLE__
+#include <CoreServices/CoreServices.h>
+#endif
 
 #ifdef _WIN32
 void handle_hello(int fd, CHAR *target) {
@@ -51,6 +54,14 @@ void handle_os(int fd, char *target) {
 	else {
 		strncpy_s(os_content, "WINDOWS", OS_INFO_BUFFER_SIZE);
 	}
+#elif defined(__APPLE__)
+	char tmp_os_content[OS_INFO_BUFFER_SIZE];
+	FILE *cmd = popen("sw_vers -productVersion", "r");
+	while (fgets(tmp_os_content, OS_INFO_BUFFER_SIZE, cmd) != NULL) {}
+	pclose(cmd);
+	sprintf(os_content, "OSX ");
+	size_t os_content_size = strlen(os_content);
+	snprintf(os_content + os_content_size, OS_INFO_BUFFER_SIZE - os_content_size, "%s", tmp_os_content);
 #elif defined(__linux__)
 	FILE *cmd = popen("cat /etc/os-release | grep -m1 \"NAME\" | sed -r 's/NAME=//g'", "r");
 	while (fgets(os_content, OS_INFO_BUFFER_SIZE, cmd) != NULL) {}
@@ -58,11 +69,6 @@ void handle_os(int fd, char *target) {
 #endif
 	set_message(fd, os_content, target);
 }
-
-#ifdef _WIN32
-
-
-#endif
 
 #ifdef _WIN32
 void handle_cpu(int fd, CHAR *target) {
@@ -73,7 +79,7 @@ void handle_cpu(int fd, char *target) {
 #endif
 
 #ifdef _WIN32
-	
+	// TODO, use asm block to invoke cpuid
 #elif defined(__linux__)
 	FILE *cmd = popen("cat /proc/cpuinfo | grep \"model name\" | uniq | sed -r 's/[mM]odel name\\s{0,}:\\s{0,}//g'", "r");
 	while (fgets(cpu_content, CPU_INFO_BUFFER_SIZE, cmd) != NULL) {}

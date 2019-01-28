@@ -29,14 +29,14 @@ $(shell mkdir -p $(DEBUG_DIR))
 all: $(DEBUG_DIR)/s3ntineL-irc $(RELEASE_DIR)/s3ntineL-irc
 
 $(RELEASE_DIR)/s3ntineL-irc: $(OBJ)
-                             $(CC) $(RELEASE_CFLAGS) $^ -o $@
+			     $(CC) $(RELEASE_CFLAGS) $^ -o $@
 
 $(DEBUG_DIR)/s3ntineL-irc: $(OBJ)
-                           $(CC) $^ -o $@
+			   $(CC) $^ -o $@
 
 # Explicit object file, because all content is in src
 $(OBJ_DIR)/s3ntineL-irc.o: $(PROJECT_DIR)/s3ntineL-irc.cpp
-                           $(CC) $< -c -o $@
+			   $(CC) $< -c -o $@
 
 # Explicit object file, because we want to add the dynamic public key
 # $(OBJ_DIR)/crypto.o: $(PROJECT_DIR)/src/crypto.c
@@ -44,11 +44,11 @@ $(OBJ_DIR)/s3ntineL-irc.o: $(PROJECT_DIR)/s3ntineL-irc.cpp
 
 # General way to map object files with src/ ones
 $(OBJ_DIR)/%.o: $(PROJECT_DIR)/%.cpp
-                $(CC) $< -c -o $@
+		$(CC) $< -c -o $@
 
 
 .PHONY: clean
 clean:
-        rm -f $(OBJ) $(RELEASE_DIR)/s3ntineL-irc-unix $(DEBUG_DIR)/s3ntineL-irc-unix
-        rm -rf $(RELEASE_DIR) $(DEBUG_DIR) $(BIN_DIR) $(OBJ_DIR)
+	rm -f $(OBJ) $(RELEASE_DIR)/s3ntineL-irc-unix $(DEBUG_DIR)/s3ntineL-irc-unix
+	rm -rf $(RELEASE_DIR) $(DEBUG_DIR) $(BIN_DIR) $(OBJ_DIR)
 
