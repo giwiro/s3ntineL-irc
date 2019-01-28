@@ -1,6 +1,4 @@
-#ifdef _WIN32
 #include "pch.h"
-#endif
 #include "command.h"
 #include "logger.h"
 #include "irc.h"

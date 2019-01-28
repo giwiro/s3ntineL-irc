@@ -13,6 +13,8 @@
 #include <stdlib.h>  
 #include <stdio.h>  
 #include <stdarg.h>
+#ifdef _WIN32
 #include <tchar.h>
+#endif
 
 #endif //PCH_H
