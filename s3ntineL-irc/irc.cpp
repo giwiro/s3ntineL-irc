@@ -166,6 +166,12 @@ void command_handler_proxy(int fd, char *nickname, char *username, char *target,
 			handle_cpu(fd, nickname);
 		}
 	}
+	else if (strncmp(message, ".SHELL", 4) == 0) {
+		if (target_channel == 0) {
+			handle_shell(fd, nickname);
+			log_message("finished .SHELL\n");
+		}
+	}
 }
 
 #ifdef _WIN32

