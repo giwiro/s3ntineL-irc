@@ -38,9 +38,9 @@ void handle_cpu(int fd, char *target);
 #endif
 
 #ifdef _WIN32
-void handle_shell(int fd, CHAR *target);
+void handle_shell(int fd, CHAR *target, CHAR *ip, int port);
 #elif defined(__linux__) || defined(__APPLE__)
-void handle_shell(int fd, char *target);
+void handle_shell(int fd, char *target, char *ip, int port);
 #endif
 
 #endif
