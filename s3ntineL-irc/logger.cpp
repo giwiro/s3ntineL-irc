@@ -10,6 +10,7 @@ void log_message(const CHAR* fmt, ...)
 void log_message(const char* fmt, ...)
 #endif
 {
+#ifdef _DEBUG
     // fflush(stdout);
 #ifdef _WIN32
     static CHAR buffer[MAX_SIZE_LOGGER_BUFFER];
@@ -36,11 +37,12 @@ void log_message(const char* fmt, ...)
     // Facilitate a normal return when va_start is used
     va_end(args);
     fflush(stdout);
-
+#endif // DEBUG
 }
 
 void print_banner()
 {
+#ifdef _DEBUG
     printf("%s\n", "                      _                        ");
     printf("%s\n", "                      \\`*-.                    ");
     printf("%s\n", "                       )  _`-.                 ");
@@ -65,4 +67,5 @@ void print_banner()
         printf("%s\n", "        _.-'_./   {_.'   ; /");
         printf("%s\n", "       {_.-``-'         {_/");
     */
+#endif // DEBUG
 }

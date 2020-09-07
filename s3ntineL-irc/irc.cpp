@@ -174,9 +174,6 @@ void command_handler_proxy(int fd, char *nickname, char *username, char *target,
             int count = 0;
 #ifdef _WIN32
             char *next_token1 = NULL;
-
-            printf("G0na check this : %s\n", message);
-
             char* _token = strtok_s(message, " ", &next_token1);
 #else
             char* _token = strtok(message, " ");
@@ -200,8 +197,6 @@ void command_handler_proxy(int fd, char *nickname, char *username, char *target,
                     break;
                 }
             }
-
-            printf("%s:%d\n", ip, port);
 
             if (port == 0) {
                 log_message("Wrong port input\n");

