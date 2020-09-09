@@ -7,9 +7,9 @@ DEBUG_DIR=$(BIN_DIR)/Debug
 PROJECT_DIR=s3ntineL-irc
 
 # CHANGEMEEEEEEEEE
-PUBLIC_KEY='"-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAv5mynmP9yOJxBVjwsw4Z7V4nPQrKvczED1Mhq2FrlDR0y4JgwYr00oA91G4Y1tERM78VFCIDOcINVO7n0bRTDL24dDmmvtabI0iNveDFKJEr6RnshoKWtmHPsU1nf3chjbDipH1C/PL5aCNRvFQrYrg9RMCskOGGoZEFw4C+xmyCTEsEhT74xBiHrlfstxe/kkmuKAHGL9njtOCxeH/DpS3rFk9Anfyewgs6204jiszNdFpjJXxpkA8qHOpi9A7wfFmn10Lmc9fNUv2kTcVgu5UGIkHqURMDFa7cKD2bPUC5FvztWVB0rJHiw2gAXux/nJDddyqhNxgtvH70sJ4U6wIDAQAB\n-----END PUBLIC KEY-----\n"'
+# PUBLIC_KEY='"-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAv5mynmP9yOJxBVjwsw4Z7V4nPQrKvczED1Mhq2FrlDR0y4JgwYr00oA91G4Y1tERM78VFCIDOcINVO7n0bRTDL24dDmmvtabI0iNveDFKJEr6RnshoKWtmHPsU1nf3chjbDipH1C/PL5aCNRvFQrYrg9RMCskOGGoZEFw4C+xmyCTEsEhT74xBiHrlfstxe/kkmuKAHGL9njtOCxeH/DpS3rFk9Anfyewgs6204jiszNdFpjJXxpkA8qHOpi9A7wfFmn10Lmc9fNUv2kTcVgu5UGIkHqURMDFa7cKD2bPUC5FvztWVB0rJHiw2gAXux/nJDddyqhNxgtvH70sJ4U6wIDAQAB\n-----END PUBLIC KEY-----\n"'
 
-DYNAMIC_PUBLIC_KEY_FLAG=-DPUB_KEY=$(PUBLIC_KEY)
+# DYNAMIC_PUBLIC_KEY_FLAG=-DPUB_KEY=$(PUBLIC_KEY)
 STATIC_COMPILE_CFLAGS=-static -static-libgcc
 # Optimizations:
 #	-O3: 3Â° optimization (faster run)
@@ -17,7 +17,7 @@ STATIC_COMPILE_CFLAGS=-static -static-libgcc
 #	-s: Strip out all debugging symbols (smaller bin)
 #	-fno-math-errno: Do not check the errno after calling math functions
 RELEASE_CFLAGS=-O3 -pipe -s -fno-math-errno
-DEBUG_CFLAGS=-Wall
+DEBUG_CFLAGS=-Wall -gdwarf-2 -g -O0 -DDEBUG
 
 OBJ = $(OBJ_DIR)/s3ntineL-irc.o $(OBJ_DIR)/irc.o $(OBJ_DIR)/net.o $(OBJ_DIR)/logger.o $(OBJ_DIR)/command.o
 
@@ -32,7 +32,7 @@ $(RELEASE_DIR)/s3ntineL-irc: $(OBJ)
 			     $(CC) $(RELEASE_CFLAGS) $^ -o $@
 
 $(DEBUG_DIR)/s3ntineL-irc: $(OBJ)
-			   $(CC) $^ -o $@
+			   $(CC) $^ $(DEBUG_CFLAGS) -o $@
 
 # Explicit object file, because all content is in src
 $(OBJ_DIR)/s3ntineL-irc.o: $(PROJECT_DIR)/s3ntineL-irc.cpp

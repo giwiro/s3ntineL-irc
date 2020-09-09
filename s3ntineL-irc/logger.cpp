@@ -10,7 +10,7 @@ void log_message(const CHAR* fmt, ...)
 void log_message(const char* fmt, ...)
 #endif
 {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEBUG) || true
     // fflush(stdout);
 #ifdef _WIN32
     static CHAR buffer[MAX_SIZE_LOGGER_BUFFER];
@@ -42,7 +42,7 @@ void log_message(const char* fmt, ...)
 
 void print_banner()
 {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEBUG)
     printf("%s\n", "                      _                        ");
     printf("%s\n", "                      \\`*-.                    ");
     printf("%s\n", "                       )  _`-.                 ");

