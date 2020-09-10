@@ -8,9 +8,14 @@
                                                                     _.-'_./   {_.'   ; /
                                                                    {_.-``-'         {_/
 ```
-Post exploitation tool to maintain access to a computer
+Multiplatform, post-exploitation tool to maintain the continuous access to a computer
+using irc as communication bus and capable of spawning a remote shell.
 
 
 
-## Build
+## Compile
+In order to keep
+
+
+## Post compile
 
