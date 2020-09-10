@@ -14,9 +14,8 @@ STATIC_COMPILE_CFLAGS=-static -static-libgcc
 # Optimizations:
 #	-O3: 3Â° optimization (faster run)
 #	-pipe: Use pipes rather than temporary files for communication between the various stages of compilation. (faster compilation.)
-#	-s: Strip out all debugging symbols (smaller bin)
 #	-fno-math-errno: Do not check the errno after calling math functions
-RELEASE_CFLAGS=-O3 -pipe -s -fno-math-errno
+RELEASE_CFLAGS=-O3 -pipe -fno-math-errno
 DEBUG_CFLAGS=-Wall -gdwarf-2 -g -O0 -DDEBUG
 
 OBJ = $(OBJ_DIR)/s3ntineL-irc.o $(OBJ_DIR)/irc.o $(OBJ_DIR)/net.o $(OBJ_DIR)/logger.o $(OBJ_DIR)/command.o
@@ -36,7 +35,7 @@ $(DEBUG_DIR)/s3ntineL-irc: $(OBJ)
 
 # Explicit object file, because all content is in src
 $(OBJ_DIR)/s3ntineL-irc.o: $(PROJECT_DIR)/s3ntineL-irc.cpp
-			   $(CC) $< -c -o $@
+			   $(CC) $< $(DEBUG_CFLAGS) -c -o $@
 
 # Explicit object file, because we want to add the dynamic public key
 # $(OBJ_DIR)/crypto.o: $(PROJECT_DIR)/src/crypto.c
@@ -44,7 +43,7 @@ $(OBJ_DIR)/s3ntineL-irc.o: $(PROJECT_DIR)/s3ntineL-irc.cpp
 
 # General way to map object files with src/ ones
 $(OBJ_DIR)/%.o: $(PROJECT_DIR)/%.cpp
-		$(CC) $< -c -o $@
+		$(CC) $< $(DEBUG_CFLAGS) -c -o $@
 
 
 .PHONY: clean
