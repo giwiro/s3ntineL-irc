@@ -19,7 +19,8 @@
 #define IRC_HOST "ix2.undernet.org"
 #define IRC_IP "170.178.191.18"
 #define IRC_IP_SIZE (sizeof(IRC_IP)/sizeof(IRC_IP[0]))
-#define IRC_CHANNEL "#changemehardmode"
+// The irc channel is defined in make
+// #define IRC_CHANNEL "#changemehardmode"
 
 #define IRC_MAX_NICKNAME_SIZE 12
 #define IRC_MAX_USER_SIZE 9
