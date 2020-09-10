@@ -170,7 +170,7 @@ void command_handler_proxy(int fd, char *nickname, char *username, char *target,
     else if (strncmp(message, ".SHELL", 5) == 0) {
         if (target_channel == 0) {
             char ip[IP_MAX_SIZE] = {'\0'};
-            int port;
+            int port = 0;
             int count = 0;
 #ifdef _WIN32
             char *next_token1 = NULL;

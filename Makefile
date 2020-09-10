@@ -35,7 +35,7 @@ $(DEBUG_DIR)/s3ntineL-irc: $(OBJ)
 
 # Explicit object file, because all content is in src
 $(OBJ_DIR)/s3ntineL-irc.o: $(PROJECT_DIR)/s3ntineL-irc.cpp
-			   $(CC) $< $(DEBUG_CFLAGS) -c -o $@
+			   $(CC) $< -c -o $@
 
 # Explicit object file, because we want to add the dynamic public key
 # $(OBJ_DIR)/crypto.o: $(PROJECT_DIR)/src/crypto.c
@@ -43,7 +43,7 @@ $(OBJ_DIR)/s3ntineL-irc.o: $(PROJECT_DIR)/s3ntineL-irc.cpp
 
 # General way to map object files with src/ ones
 $(OBJ_DIR)/%.o: $(PROJECT_DIR)/%.cpp
-		$(CC) $< $(DEBUG_CFLAGS) -c -o $@
+		$(CC) $< -c -o $@
 
 
 .PHONY: clean
