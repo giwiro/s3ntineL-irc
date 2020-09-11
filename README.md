@@ -11,11 +11,33 @@
 Multiplatform, post-exploitation tool to maintain the continuous access to a computer
 using irc as communication bus and capable of spawning a remote shell.
 
+This software keeps an open socket to IRC, so it can receive instructions at all time and
+automatically generates a nickname and use the device user as username.
+
+In order to receive a valid command, it has to be sent in this format: `.COMMAND arg` \
+All available commands are listed in the `command_handler_proxy` function at the `irc.cpp` file.
+Some commands are only available if the message was sent as a private message.
 
 
 ## Compile
-In order to keep
+
+### Unix
+Since this project uses Makefile, just execute:
+
+```shell script
+$ make IRC_CHANNEL=somecustomircchannel all
+```
+
+It's important you set up the `IRC_CHANNEL` variable in order to prevent unauthorized access to the
+IRC channel.
+
+### Windows
+Just open the project with Visual Studio and build it as a regular project.
 
 
-## Post compile
+## Legal Disclamer
 
+```
+The author does not hold any responsibility for the bad use of this tool,
+remember that attacking targets without prior consent is illegal and punished by law.
+```
