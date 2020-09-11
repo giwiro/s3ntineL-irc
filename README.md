@@ -31,6 +31,9 @@ $ make IRC_CHANNEL=somecustomircchannel all
 It's important you set up the `IRC_CHANNEL` variable in order to prevent unauthorized access to the
 IRC channel.
 
+You will find the binaries for debug and release in the following folders respectively:
+`bin/Debug/` and `bin/Release/`
+
 ### Windows
 Just open the project with Visual Studio and build it as a regular project. \
 BUT !!!!!!!!!! Make sure you change the `IRC_CHANNEL` variable for your project in order to prevent unauthorized access to the
@@ -39,6 +42,8 @@ You can change the value here (change the key `IRC_CHANNEL`):
 
 `Project > s3ntineL-irc Properties > Configuration Properties > C/C++ > Preprocessor > Preprocessor Definitions`
 
+You will find the binaries for debug and release in the following folders respectively:
+`Debug/` and `Release/`
 
 ## Legal Disclamer
 
