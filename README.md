@@ -32,7 +32,12 @@ It's important you set up the `IRC_CHANNEL` variable in order to prevent unautho
 IRC channel.
 
 ### Windows
-Just open the project with Visual Studio and build it as a regular project.
+Just open the project with Visual Studio and build it as a regular project. \
+BUT !!!!!!!!!! Make sure you change the `IRC_CHANNEL` variable for your project in order to prevent unauthorized access to the
+IRC channel.
+You can change the value here (change the key `IRC_CHANNEL`):
+
+`Project > s3ntineL-irc Properties > Configuration Properties > C/C++ > Preprocessor > Preprocessor Definitions`
 
 
 ## Legal Disclamer

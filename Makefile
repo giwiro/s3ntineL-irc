@@ -9,13 +9,9 @@ OBJ_DEBUG_DIR=$(OBJ_DIR)/Debug
 OBJ_RELEASE_DIR=$(OBJ_DIR)/Release
 PROJECT_DIR=s3ntineL-irc
 
-IRC_CHANNEL?=changemepinga
-IRC_CHANNEL_NAME='"\#$(IRC_CHANNEL)"'
+IRC_CHANNEL?=changeme1234
+IRC_CHANNEL_NAME='"$(IRC_CHANNEL)"'
 
-# CHANGEMEEEEEEEEE
-# PUBLIC_KEY='"-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAv5mynmP9yOJxBVjwsw4Z7V4nPQrKvczED1Mhq2FrlDR0y4JgwYr00oA91G4Y1tERM78VFCIDOcINVO7n0bRTDL24dDmmvtabI0iNveDFKJEr6RnshoKWtmHPsU1nf3chjbDipH1C/PL5aCNRvFQrYrg9RMCskOGGoZEFw4C+xmyCTEsEhT74xBiHrlfstxe/kkmuKAHGL9njtOCxeH/DpS3rFk9Anfyewgs6204jiszNdFpjJXxpkA8qHOpi9A7wfFmn10Lmc9fNUv2kTcVgu5UGIkHqURMDFa7cKD2bPUC5FvztWVB0rJHiw2gAXux/nJDddyqhNxgtvH70sJ4U6wIDAQAB\n-----END PUBLIC KEY-----\n"'
-
-# DYNAMIC_PUBLIC_KEY_FLAG=-DPUB_KEY=$(PUBLIC_KEY)
 STATIC_COMPILE_CFLAGS=-static -static-libgcc
 # Optimizations:
 #	-O3: 3Â° optimization (faster run)
@@ -48,9 +44,6 @@ $(OBJ_DEBUG_DIR)/s3ntineL-irc.o: $(PROJECT_DIR)/s3ntineL-irc.cpp
 
 $(OBJ_RELEASE_DIR)/s3ntineL-irc.o: $(PROJECT_DIR)/s3ntineL-irc.cpp
 			$(CC) $< $(COMMON_CFLAGS) $(RELEASE_CFLAGS) -c -o $@
-# Explicit object file, because we want to add the dynamic public key
-# $(OBJ_DIR)/crypto.o: $(PROJECT_DIR)/src/crypto.c
-#					 $(CC) $(DYNAMIC_PUBLIC_KEY_FLAG) $< -c -o $@
 
 # General way to map object files with src/ ones
 $(OBJ_DEBUG_DIR)/%.o: $(PROJECT_DIR)/%.cpp

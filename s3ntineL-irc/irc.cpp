@@ -5,6 +5,9 @@
 #if defined(__linux__) || defined(__APPLE__)
 #include "net.h"
 #endif
+// #ifdef _WIN32
+// #define IRC_CHANNEL "#changeme1234"
+// #endif
 
 #ifdef _WIN32
 void generate_nickname(CHAR *nick) {
@@ -94,10 +97,10 @@ void set_message(int fd, char *message, char *target) {
 void join_channel(int fd) {
 #ifdef _WIN32
     CHAR join_packet[IRC_MAX_MSG_SIZE];
-    snprintf(join_packet, IRC_MAX_MSG_SIZE, "JOIN %s\r\n", IRC_CHANNEL);
+    snprintf(join_packet, IRC_MAX_MSG_SIZE, "JOIN #%s\r\n", IRC_CHANNEL);
 #elif defined(__linux__) || defined(__APPLE__)
     char join_packet[IRC_MAX_MSG_SIZE];
-    snprintf(join_packet, IRC_MAX_MSG_SIZE, "JOIN %s\r\n", IRC_CHANNEL);
+    snprintf(join_packet, IRC_MAX_MSG_SIZE, "JOIN #%s\r\n", IRC_CHANNEL);
 #endif
     log_message(">>>>>>> %s", join_packet);
     send_packet(fd, join_packet, strlen(join_packet));
