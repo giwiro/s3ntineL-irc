@@ -23,7 +23,7 @@
 // #define IRC_CHANNEL "#changemehardmode"
 
 #define IRC_MAX_NICKNAME_SIZE 12
-#define IRC_MAX_USER_SIZE 9
+#define IRC_MAX_USER_SIZE 10
 #define IRC_MAX_MSG_SIZE 512
 
 #define IP_MAX_SIZE 16

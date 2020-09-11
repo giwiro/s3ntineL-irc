@@ -11,14 +11,14 @@ void generate_nickname(CHAR *nick) {
 #elif defined(__linux__) || defined(__APPLE__)
 void generate_nickname(char *nick) {
 #endif
-    time_t timestamp_sec; /* timestamp in second */
-    time(&timestamp_sec);
+  time_t timestamp_sec; /* timestamp in second */
+  time(&timestamp_sec);
 #ifdef _WIN32
-    snprintf(nick, IRC_MAX_USER_SIZE, "W%ld", (long)(timestamp_sec % 10000000));
+  snprintf(nick, IRC_MAX_USER_SIZE, "W%ld", (long)(timestamp_sec % 10000000));
 #elif defined(__linux__)
-    snprintf(nick, IRC_MAX_USER_SIZE, "U%ld", timestamp_sec % 10000000);
+  snprintf(nick, IRC_MAX_USER_SIZE, "U%ld",  (long)(timestamp_sec % 10000000));
 #elif defined(__APPLE__)
-    snprintf(nick, IRC_MAX_USER_SIZE, "X%ld", timestamp_sec % 10000000);
+  snprintf(nick, IRC_MAX_USER_SIZE, "X%ld", timestamp_sec % 10000000);
 #endif
 }
 

